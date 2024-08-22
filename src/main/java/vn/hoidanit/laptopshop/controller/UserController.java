@@ -1,5 +1,7 @@
 package vn.hoidanit.laptopshop.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -7,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import vn.hoidanit.laptopshop.domain.User;
-import vn.hoidanit.laptopshop.repository.UserRepository;
 import vn.hoidanit.laptopshop.service.UserService;
 
 @Controller
@@ -21,6 +22,8 @@ public class UserController {
 
     @RequestMapping("/")
     public String getHomePage(Model model) {
+        User arrUsers = this.userService.getAllUserByEmail("123@gmail.com");
+        System.out.println("Check home page data: " + arrUsers);
 
         model.addAttribute("minhvn", "test");
         model.addAttribute("mvn", "Minhvn");
@@ -36,8 +39,8 @@ public class UserController {
     // post data from form mvc tutorial
     @RequestMapping(value = "/admin/user/create1", method = RequestMethod.POST)
     public String postCreateUserPage(Model model, @ModelAttribute("newUser") User minhvn) {
-        System.out.println("run here: " + minhvn);
-        this.userService.handelSaveUser(minhvn);
+        User newUser = this.userService.handelSaveUser(minhvn);
+        System.out.println(">>> Check newUser: " + newUser);
         return "hello";
     }
 
