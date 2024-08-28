@@ -7,32 +7,34 @@
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
+                <title>Update User ${userId.fullName}</title>
 
                 <!-- Latest compiled and minified CSS -->
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
                 <!-- Latest compiled JavaScript -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"> </script>
-
             </head>
 
             <body>
+
                 <div class="container mt-3">
                     <div class="row">
                         <div class="col-md-6 col-12 mx-auto">
-                            <h3>Create a user</h3>
+                            <div class="d-flex justify-content-between">
+                                <h3 class="d-inline-block">Update User: ${userId.fullName}</h3>
+                                <a href="/admin/user" class="btn btn-warning px-4">back</a>
+                            </div>
                             <hr>
-                            <form:form method="post" action="/admin/user/create" modelAttribute="newUser">
-                                <div class="mb-3">
-                                    <label class="form-label">Email address</label>
-                                    <form:input type="email" class="form-control email" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp" path="email" />
+
+                            <form:form method="post" action="/admin/user/update" modelAttribute="userId">
+                                <div class="mb-3 d-none">
+                                    <label class="form-label">ID</label>
+                                    <form:input class="form-control id" path="id" />
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <form:input type="password" class="form-control password" id="exampleInputPassword1"
-                                        path="password" />
+                                    <label class="form-label">Email</label>
+                                    <form:input class="form-control email" type="email" path="email" disabled="true" />
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Full Name</label>
@@ -40,7 +42,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label address">Address</label>
-                                    <form:input class="form-control password" path="address" />
+                                    <form:input class="form-control address" path="address" />
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label phone">Phone Number</label>
@@ -52,7 +54,6 @@
                         </div>
                     </div>
                 </div>
-
 
             </body>
 
