@@ -24,7 +24,7 @@
             <c:out value="${minhvn}" /> //jstl <br>
             ${mvn} // jsp <br>
 
-            <button class="btn btn-warning">Submit</button>
+            <a href="/admin" class="btn btn-warning">Submit</a>
 
         </body>
 

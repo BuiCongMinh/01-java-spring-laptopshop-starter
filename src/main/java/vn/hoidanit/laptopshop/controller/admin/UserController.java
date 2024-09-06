@@ -1,4 +1,4 @@
-package vn.hoidanit.laptopshop.controller;
+package vn.hoidanit.laptopshop.controller.admin;
 
 import java.util.List;
 
@@ -8,19 +8,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
 
 @Controller
 public class UserController {
     private final UserService userService;
+    private final UploadService uploadService;
 
     // code style DI
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UploadService uploadService) {
         this.userService = userService;
+        this.uploadService = uploadService;
 
     }
 
@@ -38,7 +44,7 @@ public class UserController {
         List<User> allUsers = this.userService.getAllUser();
         model.addAttribute("allUsers", allUsers);
         // System.out.println(">>>check allUser get all page: " + allUsers);
-        return "admin/user/getAllUser";
+        return "admin/user/show";
     }
 
     // get one user by id page
@@ -47,30 +53,30 @@ public class UserController {
         User detailUser = this.userService.getUserByID(id);
         model.addAttribute("detailUser", detailUser);
         model.addAttribute("id", id);
-        return "admin/user/getOneUserId";
+        return "admin/user/detail";
     }
 
-    // update user by id page
+    // get update user by id page
     @RequestMapping(value = "/admin/user/update/{id}", method = RequestMethod.GET)
     public String getPageUpdateUser(Model model, @PathVariable long id) {
         User userId = this.userService.getUserByID(id);
         model.addAttribute("userId", userId);
-        return "admin/user/getUpdateUserPage";
+        return "admin/user/update";
     }
 
-    // create user page
+    // get create user page
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.GET)
     public String getPageCreateUser(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
 
-    // delete user page
+    // get delete user page
     @GetMapping("/admin/user/delete/{id}")
     public String getPageDeleteUser(Model model, @PathVariable long id) {
         User user = this.userService.getUserByID(id);
         model.addAttribute("user", user);
-        return "admin/user/getDeleteUser";
+        return "admin/user/delete";
     }
 
     // post update user from mvc
@@ -89,8 +95,14 @@ public class UserController {
 
     // post create data from "form" mvc tutorial
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public String postCreateUser(Model model, @ModelAttribute("newUser") User minhvn) {
-        User newUser = this.userService.handelSaveUser(minhvn);
+    public String postCreateUser(
+            Model model,
+            @ModelAttribute("newUser") User minhvn,
+            @RequestParam("hoidanitFile") MultipartFile file) {
+
+        String avatar = this.uploadService.handelUploadFile(file, "avatar");
+
+        // this.userService.handelSaveUser(minhvn);
         return "redirect:/admin/user";
     }
 
