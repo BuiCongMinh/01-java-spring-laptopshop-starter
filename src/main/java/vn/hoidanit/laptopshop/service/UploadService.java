@@ -18,7 +18,13 @@ public class UploadService {
         this.servletContext = servletContext;
     }
 
-    public String handelUploadFile(MultipartFile file, String targetFolder) {
+    public String handelSaveUploadFile(MultipartFile file, String targetFolder) {
+        // validate file empty
+        if (file.isEmpty()) {
+            return "";
+        }
+        // end
+
         String rootPath = this.servletContext.getRealPath("/resources/images");
         String finalName = "";
 
@@ -33,8 +39,10 @@ public class UploadService {
             File serverFile = new File(dir.getAbsolutePath() + File.separator + finalName);
             BufferedOutputStream stream = new BufferedOutputStream(
                     new FileOutputStream(serverFile));
+
             stream.write(bytes);
             stream.close();
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

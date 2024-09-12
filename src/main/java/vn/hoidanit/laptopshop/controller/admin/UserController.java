@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
@@ -36,13 +40,13 @@ public class UserController {
 
     }
 
-    @RequestMapping("/")
-    public String getHomePage(Model model) {
-        List<User> arrUsers = this.userService.getAllUser();
-        model.addAttribute("minhvn", "test");
-        model.addAttribute("mvn", "Minhvn");
-        return "hello";
-    }
+    // @RequestMapping("/")
+    // public String getHomePage(Model model) {
+    // List<User> arrUsers = this.userService.getAllUser();
+    // model.addAttribute("minhvn", "test");
+    // model.addAttribute("mvn", "Minhvn");
+    // return "hello";
+    // }
 
     // get all user
     @RequestMapping(value = "/admin/user", method = RequestMethod.GET)
@@ -103,10 +107,24 @@ public class UserController {
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
     public String postCreateUser(
             Model model,
-            @ModelAttribute("newUser") User minhvn,
+            @ModelAttribute("newUser") @Valid User minhvn,
+            BindingResult newUserBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
 
-        String avatar = this.uploadService.handelUploadFile(file, "avatar");
+        // handel logic Validate
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(">>>" + error.getField() + " - " + error.getDefaultMessage());
+        }
+        // end
+
+        // Validate
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
+        // end
+
+        String avatar = this.uploadService.handelSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(minhvn.getPassword());
 
         minhvn.setAvatar(avatar);
@@ -141,5 +159,4 @@ public class UserController {
 // public String getHomePage() {
 // return this.userService.handelHello();
 // }
-
 // }

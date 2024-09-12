@@ -58,22 +58,42 @@
                                         <form:form class="row g-3" method="post" action="/admin/user/create"
                                             modelAttribute="newUser" enctype="multipart/form-data">
                                             <div class="col-md-6 col-12">
+                                                <c:set var="errorsEmail">
+                                                    <form:errors path="email" cssClass="text-danger" />
+                                                </c:set>
                                                 <label class="form-label">Email address: </label>
-                                                <form:input type="email" class="form-control email"
+                                                <form:input type="email"
+                                                    class="form-control ${not empty errorsEmail ? 'is-invalid' : ''} email"
                                                     id="exampleInputEmail1" aria-describedby="emailHelp" path="email" />
+
+                                                ${errorsEmail}
+
                                             </div>
                                             <div class="col-md-6 col-12">
+                                                <c:set var="errorsPassword">
+                                                    <form:errors path="password" cssClass="text-danger" />
+                                                </c:set>
                                                 <label class="form-label">Password: </label>
-                                                <form:input type="password" class="form-control password"
+                                                <form:input type="password"
+                                                    class="form-control ${not empty errorsPassword ? 'is-invalid' : '' } password"
                                                     id="exampleInputPassword1" path="password" />
+
+                                                ${errorsPassword}
+
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <label class="form-label phone">Phone Number: </label>
                                                 <form:input class="form-control password" path="phone" />
                                             </div>
                                             <div class="col-md-6 col-12">
+                                                <c:set var="errorFullName">
+                                                    <form:errors path="fullName" cssClass="text-danger" />
+                                                </c:set>
                                                 <label class="form-label">Full Name: </label>
-                                                <form:input class="form-control fullName" path="fullName" />
+                                                <form:input class="form-control ${not empty errorFullName?'
+                                                    is-invalid':''} fullName" path="fullName" />
+
+                                                ${errorFullName}
                                             </div>
                                             <div class="col-md-12 col-12">
                                                 <label class="form-label address">Address: </label>
