@@ -34,6 +34,7 @@ public class UserController {
             UserService userService,
             UploadService uploadService,
             PasswordEncoder passwordEncoder) {
+
         this.userService = userService;
         this.uploadService = uploadService;
         this.passwordEncoder = passwordEncoder;
@@ -91,15 +92,22 @@ public class UserController {
 
     // post update user from mvc
     @PostMapping("/admin/user/update")
-    public String postUpdateUser(Model model, @ModelAttribute("userId") User newUser) {
+    public String postUpdateUser(
+            Model model,
+            @ModelAttribute("userId") User newUser) {
+
         User currentUser = this.userService.getUserByID(newUser.getId());
+
+        // validate user exist;
         if (currentUser != null) {
             currentUser.setAddress(newUser.getAddress());
             currentUser.setFullName(newUser.getFullName());
             currentUser.setPhone(newUser.getPhone());
 
             this.userService.handelSaveUser(currentUser);
+
         }
+        // end
         return "redirect:/admin/user";
     }
 
@@ -111,21 +119,27 @@ public class UserController {
             BindingResult newUserBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
 
-        // handel logic Validate
+        // Handel logic Validate
         List<FieldError> errors = newUserBindingResult.getFieldErrors();
         for (FieldError error : errors) {
             System.out.println(">>>" + error.getField() + " - " + error.getDefaultMessage());
+
         }
         // end
 
-        // Validate
+        // Adjust code flow
         if (newUserBindingResult.hasErrors()) {
             return "admin/user/create";
         }
         // end
 
+        // upLoadFile
         String avatar = this.uploadService.handelSaveUploadFile(file, "avatar");
+        // end
+
+        // hash password
         String hashPassword = this.passwordEncoder.encode(minhvn.getPassword());
+        // end
 
         minhvn.setAvatar(avatar);
         minhvn.setPassword(hashPassword);

@@ -45,7 +45,7 @@
                         <ol class="breadcrumb mb-4 gap-1">
                             <a href="/admin">Dashboard</a>
                             <span>/</span>
-                            <span>User</span>
+                            <a href="/admin/user">User</a>
                             <span>/</span>
                             <span>Create</span>
                         </ol>

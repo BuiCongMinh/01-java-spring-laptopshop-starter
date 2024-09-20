@@ -35,7 +35,7 @@ public class UserService {
 
     public User handelSaveUser(User user) {
         User minhvn1 = this.userRepository.save(user);
-        System.out.println(">>> check user: " + minhvn1);
+        // System.out.println(">>> check user: " + minhvn1);
         return minhvn1;
     }
 

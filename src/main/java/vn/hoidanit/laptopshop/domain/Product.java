@@ -6,22 +6,39 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @NotNull
     private long id;
+
+    @NotEmpty(message = "Tên sản phẩm ko được để trống !")
     private String name;
+
+    @Min(value = 1, message = "Price phải lớn hơn 0")
     private double price;
-    private String image;
+
+    @NotEmpty(message = "Mô tả sản phẩm ko được để trống !")
     private String detailDesc;
+
+    @NotEmpty(message = "shortDesc ko được để trống !")
     private String shortDesc;
+
+    @Min(value = 1, message = "Số lượng phải lớn hơn hoặc bằng 1")
     private long quantity;
-    private long sold;
+
     private String factory;
+    private String image;
+    private long sold;
     private String target;
 
     // OrderDetail
