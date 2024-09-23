@@ -34,32 +34,32 @@
                             <span>/</span>
                             <a href="/admin/product">Product</a>
                             <span>/</span>
-                            <span>Id ${id}</span>
+                            <span>Delete</span>
                         </ol>
                         <main>
-                            <div class="mt-3">
-                                <h3>Product detail with id: ${id}</h3>
-                                <hr>
-                                <div class="card" style="width: 18rem;">
-                                    <div class="card-header">
-                                        <h4>Product Information</h4>
-                                    </div>
-                                    <ul class="list-group list-group-flush mt-3">
-                                        <li class="list-group-item ">
-                                            <img src="/images/product/${detail.image}" class="img-thumbnail" alt="">
-                                        </li>
-                                        <li class="list-group-item">ID : ${id}</li>
-                                        <li class="list-group-item">Name : ${detail.name} </li>
-                                        <li class="list-group-item">Price: ${detail.price} </li>
-                                        <li class="list-group-item">Detail Description: ${detail.detailDesc} </li>
-                                        <li class="list-group-item">Short Description: ${detail.shortDesc} </li>
-                                        <li class="list-group-item">Quantity: ${detail.quantity} </li>
-                                        <li class="list-group-item">Factory: ${detail.factory} </li>
-                                        <li class="list-group-item">Target: ${detail.target} </li>
-                                    </ul>
+                            <div class="container mt-3">
+                                <div class="d-flex flex-column">
+                                    <h3 class="d-inline"> Delete user: ${product.name}</h3>
                                 </div>
-                                <br>
-                                <a href="/admin/product" class="btn btn-primary">back</a>
+                                <hr>
+                                <div class="alert alert-danger" role="alert">
+                                    <h5>
+                                        Do you want to delete the user: ${product.name} ?
+                                    </h5>
+                                </div>
+
+                                <form:form action="/admin/product/delete" method="POST" modelAttribute="product">
+                                    <div class="d-none">
+                                        Id
+                                        <form:input type="text" class="form-control" path="id" value="${product.id}" />
+                                    </div>
+                                    <div class="w-50">
+                                        <img class="img-thumbnail" alt="" src="/images/product/${product.image}">
+                                    </div>
+                                    <button class="btn btn-danger">Yes! Pleass.......</button>
+                                </form:form>
+
+                                <a class="btn btn-warning mt-2" href="/admin/product">No! Back to List User page</a>
                             </div>
                         </main>
                         <jsp:include page="../layout/footer.jsp" />

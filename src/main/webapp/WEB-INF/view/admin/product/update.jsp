@@ -20,6 +20,26 @@
 
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+                <script>
+                    $(document).ready(() => {
+                        const avatarFile = $("#avatarFile");
+                        const orgImage = "${product.image}";
+                        if (orgImage) {
+                            const urlImage = "/images/product/" + orgImage;
+                            $("#avatarPreview").attr("src", urlImage);
+                            $("#avatarPreview").css({ "display": "block" });
+                        }
+
+                        avatarFile.change(function (e) {
+                            const imgURL = URL.createObjectURL(e.target.files[0]);
+                            $("#avatarPreview").attr("src", imgURL);
+                            $("#avatarPreview").css({ "display": "block" });
+                        });
+                    });
+                </script>
+
             </head>
 
             <body class="sb-nav-fixed">
@@ -67,11 +87,10 @@
                                             </c:set>
                                             <!-- end  -->
 
-                                            <div class="col-md-12 col-12">
+                                            <div class="col-md-12 col-12" style="display: none;">
                                                 <label class="form-label">ID: </label>
 
-                                                <form:input class="form-control id" path="id" value="${product.id}"
-                                                    disabled="true" />
+                                                <form:input class="form-control id" path="id" value="${product.id}" />
 
                                             </div>
 
@@ -126,7 +145,7 @@
                                                     class="form-control ${not empty quaHasBindError ? 'is-invalid':''}"
                                                     path="quantity" value="${product.quantity}" />
 
-
+                                                ${quaHasBindError}
                                             </div>
 
                                             <div class="col-md-6 col-12">
@@ -152,6 +171,16 @@
                                                     <form:option value="Mỏng nhẹ">Mỏng nhẹ</form:option>
                                                     <form:option value="Doanh nhân">Doanh nhân</form:option>
                                                 </form:select>
+                                            </div>
+
+                                            <div class="mb-3 col-12 col-md-6">
+                                                <label for="avatarFile" class="form-label">Image:</label>
+                                                <input class="form-control" type="file" id="avatarFile"
+                                                    accept=".png, .jpg, .jpeg" name="hoidanitFile" />
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <img style="max-height: 250px; display: none;" alt="avatar preview"
+                                                    id="avatarPreview" />
                                             </div>
 
                                             <!-- btn submit create product  -->

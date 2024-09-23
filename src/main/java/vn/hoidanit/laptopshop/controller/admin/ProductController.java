@@ -54,7 +54,7 @@ public class ProductController {
             Model model,
             @PathVariable long id) {
         System.out.println(">>>> Check id :" + id);
-        Product detail = this.productService.getProductById(id);
+        Product detail = this.productService.getProductById(id).get();
         model.addAttribute("detail", detail);
         model.addAttribute("id", id);
         return "admin/product/detail";
@@ -65,10 +65,23 @@ public class ProductController {
     public String getUpdateProductPage(
             Model model,
             @PathVariable long id) {
-        Product productDetail = this.productService.getProductById(id);
+        Product productDetail = this.productService.getProductById(id).get();
         model.addAttribute("product", productDetail);
         return "admin/product/update";
     }
+
+    // get delete a product page
+    @GetMapping("/admin/product/delete/{id}")
+    public String getDeleteProductPage(
+            Model model,
+            @PathVariable long id) {
+
+        Product product = this.productService.getProductById(id).get();
+        model.addAttribute("product", product);
+        return "admin/product/delete";
+    }
+
+    // ==========POST====================
 
     // post create a product
     @PostMapping("/admin/product/create")
@@ -105,7 +118,8 @@ public class ProductController {
     @PostMapping("/admin/product/update")
     public String postUpdate(
             @ModelAttribute("product") @Valid Product product,
-            BindingResult bindingResult) {
+            BindingResult bindingResult,
+            @RequestParam("hoidanitFile") MultipartFile file) {
 
         // Handel logic validate
         List<FieldError> errors = bindingResult.getFieldErrors();
@@ -121,8 +135,14 @@ public class ProductController {
         }
         // end
 
-        Product productCurrent = this.productService.getProductById(product.getId());
+        Product productCurrent = this.productService.getProductById(product.getId()).get();
+
         if (productCurrent != null) {
+            if (!file.isEmpty()) {
+                String img = this.uploadService.handelSaveUploadFile(file, "product");
+                productCurrent.setImage(img);
+            }
+
             productCurrent.setName(product.getName());
             productCurrent.setPrice(product.getPrice());
             productCurrent.setDetailDesc(product.getDetailDesc());
@@ -134,11 +154,15 @@ public class ProductController {
             this.productService.handelSaveProduct(productCurrent);
 
         }
-        // } else {
-        // System.out.println(">>> Data update false ");
-        // return "admin/product/update";
-        // }
 
+        return "redirect:/admin/product";
+    }
+
+    // post delete product
+    @PostMapping("/admin/product/delete")
+    public String postDeleteProduct(
+            @ModelAttribute Product product) {
+        this.productService.deleteProductById(product.getId());
         return "redirect:/admin/product";
     }
 
