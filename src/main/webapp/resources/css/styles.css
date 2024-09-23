@@ -7888,7 +7888,7 @@ fieldset:disabled .btn {
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav,
 .sb-nav-fixed .sb-topnav {
     position: fixed;
-    top: 0;
+    top: -10px;
     right: 0;
     left: 0;
     z-index: 1030;

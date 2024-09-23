@@ -20,7 +20,7 @@
                 <a href="/" class="navbar-brand">
                     <h1 class="text-primary display-6">LaptopShop</h1>
                 </a>
-                <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler py-1 px-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars text-primary"></span>
                 </button>

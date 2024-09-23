@@ -24,7 +24,7 @@
             if ($(this).scrollTop() > 55) {
                 $('.fixed-top').addClass('shadow').css('top', -55);
             } else {
-                $('.fixed-top').removeClass('shadow').css('top', 0);
+                $('.fixed-top').removeClass('shadow').css('top', -10);
             }
         }
     });
@@ -39,7 +39,7 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
+        $('html, body').animate({ scrollTop: -10 }, 1500, 'easeInOutExpo');
         return false;
     });
 
