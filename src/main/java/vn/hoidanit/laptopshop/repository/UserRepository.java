@@ -14,7 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findUserById(long id); // ko lấy get vì hàm có thể trả ra giá trị null !
 
-    List<User> findByEmail(String email);
+    List<User> findOneByEmail(String email);
 
     List<User> findAll();
+
+    boolean existsByEmail(String email);
+
 }
