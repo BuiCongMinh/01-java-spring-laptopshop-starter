@@ -39,15 +39,20 @@
                                                         <c:set var="errorEmail">
                                                             <form:errors path="email" class="invalid-feedback" />
                                                         </c:set>
+                                                        <c:set var="errorFirstName">
+                                                            <form:errors path="firstName" class="invalid-feedback" />
+                                                        </c:set>
                                                         <!-- end  -->
 
                                                         <div class="row mb-3">
                                                             <div class="col-md-6">
                                                                 <div class="form-floating mb-3 mb-md-0">
-                                                                    <form:input path="firstName" class="form-control"
+                                                                    <form:input path="firstName"
+                                                                        class="form-control ${not empty errorFirstName ? 'is-invalid':''}"
                                                                         id="inputFirstName" type="text"
                                                                         placeholder="Enter your first name" />
                                                                     <label for="inputFirstName">First name</label>
+                                                                    ${errorFirstName}
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -62,8 +67,7 @@
                                                         <div class="form-floating mb-3">
                                                             <form:input path="email"
                                                                 class="form-control ${not empty errorEmail ? 'is-invalid':''}"
-                                                                id="inputEmail" type="email"
-                                                                placeholder="name@example.com" />
+                                                                id="inputEmail" placeholder="name@example.com" />
                                                             <label for="inputEmail">Email address</label>
                                                             ${errorEmail}
 
@@ -98,8 +102,10 @@
                                                     </form:form>
                                                 </div>
                                                 <div class="card-footer text-center py-3">
-                                                    <div class="small"><a href="login.html">Have an account? Go to
-                                                            login</a>
+                                                    <div class="small">
+                                                        <a href="/login">
+                                                            Have an account? Go to login
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
