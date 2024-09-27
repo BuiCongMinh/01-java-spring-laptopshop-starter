@@ -29,16 +29,24 @@
                                                     <h3 class="text-center font-weight-light my-4">Login</h3>
                                                 </div>
                                                 <div class="card-body">
-                                                    <form method="post" action="/register">
+                                                    <form method="post" action="/login">
                                                         <!-- c:set   -->
 
+                                                        <!-- end  -->
+
+                                                        <!-- c:if  -->
+                                                        <c:if test="${param.error != null}">
+                                                            <div class="my-2" style="color: red;">Invalid email or
+                                                                password.
+                                                            </div>
+                                                        </c:if>
                                                         <!-- end  -->
 
                                                         <div class="form-floating mb-3">
                                                             <input path="email"
                                                                 class="form-control ${not empty errorEmail ? 'is-invalid':''}"
                                                                 id="inputEmail" type="email"
-                                                                placeholder="name@example.com" />
+                                                                placeholder="name@example.com" name="username" />
                                                             <label for="inputEmail">Email address</label>
 
                                                         </div>
@@ -48,10 +56,16 @@
                                                                     <input path="password"
                                                                         class="form-control ${not empty errorPassword ? 'is-invalid':''}"
                                                                         id="inputPassword" type="password"
-                                                                        placeholder="Create a password" />
+                                                                        placeholder="Create a password"
+                                                                        name="password" />
                                                                     <label for="inputPassword">Password</label>
 
                                                                 </div>
+                                                            </div>
+                                                            <div>
+                                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                                    value="${_csrf.token}" />
+
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 w-100">
