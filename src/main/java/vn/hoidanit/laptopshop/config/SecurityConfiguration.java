@@ -35,10 +35,12 @@ public class SecurityConfiguration {
     public DaoAuthenticationProvider authProvider(
             PasswordEncoder passwordEncoder,
             UserDetailsService userDetailsService) {
+
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
         // authProvider.setHideUserNotFoundExceptions(false);
+
         return authProvider;
     }
 
@@ -50,24 +52,29 @@ public class SecurityConfiguration {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // v6. lamda
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
-                        .permitAll()
-
-                        .requestMatchers(
-                                "/", "/login", "/client/**", "/css/**", "/js/**", "/images/**",
-                                "product/**")
-                        .permitAll()
-
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        .anyRequest().authenticated())
+        http.authorizeHttpRequests(authorize -> authorize
+                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
+                .permitAll()
+                .requestMatchers(
+                        "/",
+                        "/login",
+                        "/client/**",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "product/**")
+                .permitAll()
+                .requestMatchers("/admin/**")
+                .hasRole("ADMIN")
+                .anyRequest()
+                .authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")
                         .successHandler(customSuccessHandler())
-                        .permitAll());
+                        .permitAll())
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny"));
+
         return http.build();
     }
 
