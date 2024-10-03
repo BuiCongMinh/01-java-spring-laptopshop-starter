@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ItemController {
@@ -33,18 +34,24 @@ public class ItemController {
         return "client/product/show";
     }
 
+    @GetMapping("/cart")
+    public String getCartPage(Model model) {
+        return "client/cart/show";
+    }
+
     // ================POST===================
     @PostMapping("/add-product-to-cart/{id}")
     public String addProductToCart(
             @PathVariable Long id,
             HttpServletRequest request) {
         // TODO: process POST request
+
         HttpSession session = request.getSession(false);
 
         long productId = id;
         String email = (String) session.getAttribute("email");
 
-        this.productService.handelAddProductToCart(email, productId);
+        this.productService.handelAddProductToCart(email, productId, session);
 
         return "redirect:/";
     }
