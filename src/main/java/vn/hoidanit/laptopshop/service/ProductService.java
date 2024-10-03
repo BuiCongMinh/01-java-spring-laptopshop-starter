@@ -5,15 +5,32 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import vn.hoidanit.laptopshop.domain.Cart;
+import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Product;
+import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.repository.CartDetailRepository;
+import vn.hoidanit.laptopshop.repository.CartRepository;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final CartDetailRepository cartDetailRepository;
+    private final UserService userService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(
+            ProductRepository productRepository,
+            CartRepository cartRepository,
+            CartDetailRepository cartDetailRepository,
+            UserService userService) {
+
         this.productRepository = productRepository;
+        this.cartRepository = cartRepository;
+        this.cartDetailRepository = cartDetailRepository;
+        this.userService = userService;
+
     }
 
     public List<Product> getAllProduct() {
@@ -32,6 +49,40 @@ public class ProductService {
 
     public void deleteProductById(long id) {
         this.productRepository.deleteById(id);
+    }
+
+    public void handelAddProductToCart(String email, long productId) {
+
+        User user = this.userService.getUserByEmail(email);
+        if (user != null) {
+            // Check user đã có cart chưa -> nếu chưa -> tạo mới
+            Cart cart = this.cartRepository.findByUser(user);
+
+            if (cart == null) {
+                Cart ortherCart = new Cart();
+                ortherCart.setSum(1);
+                ortherCart.setUser(user);
+
+                cart = this.cartRepository.save(ortherCart);
+            }
+
+            // save cart_detail
+            // find product by id
+            Optional<Product> productOptional = this.productRepository.findById(productId);
+            if (productOptional.isPresent()) {
+                Product realProduct = productOptional.get();
+
+                CartDetail cd = new CartDetail();
+                cd.setCart(cart);
+                cd.setProduct(realProduct);
+                cd.setPrice(realProduct.getPrice());
+                cd.setQuantity(1);
+
+                this.cartDetailRepository.save(cd);
+            }
+
+        }
+
     }
 
 }

@@ -76,6 +76,7 @@
                                         <div class="col-lg-12">
                                             <div class="row g-4">
 
+                                                <!-- all product  -->
                                                 <c:forEach var="product" items="${allProduct}">
                                                     <div class="col-md-6 col-lg-4 col-xl-3">
                                                         <div class="rounded position-relative fruite-item">
@@ -100,16 +101,26 @@
                                                                             value="${product.price}" /> đ
 
                                                                     </p>
-                                                                    <button
-                                                                        class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                                        <i class="fa fa-shopping-bag me-2 text-primary">
-                                                                        </i>
-                                                                        Add to cart</button>
+                                                                    <form action="/add-product-to-cart/${product.id}"
+                                                                        method="post">
+                                                                        <input type="hidden"
+                                                                            name="${_csrf.parameterName}"
+                                                                            value="${_csrf.token}" />
+
+                                                                        <button
+                                                                            class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                                            <i
+                                                                                class="fa fa-shopping-bag me-2 text-primary">
+                                                                            </i>
+                                                                            Add to cart
+                                                                        </button>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </c:forEach>
+                                                <!-- end  -->
 
                                             </div>
                                         </div>
