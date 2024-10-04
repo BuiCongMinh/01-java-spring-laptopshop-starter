@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.controller.clinet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -58,8 +59,9 @@ public class ItemController {
         // calls "cart" based on the "user" object just created (join table)
         Cart cart = this.productService.fetchByUser(userCurrent);
 
-        // Call list "cart_detail" on the "cart" object (join table)
-        List<CartDetail> listCart = cart.getCartDetails();
+        // Call list "cart_detail" (Check listCart null first !) on the "cart" object
+        // (join table)
+        List<CartDetail> listCart = cart == null ? new ArrayList<CartDetail>() : cart.getCartDetails();
 
         double totalPrice = 0;
         for (CartDetail cd : listCart) {
@@ -68,8 +70,8 @@ public class ItemController {
 
         model.addAttribute("listCart", listCart);
         model.addAttribute("totalPrice", totalPrice);
-        return "client/cart/show";
 
+        return "client/cart/show";
     }
 
     // ================POST===================
