@@ -127,9 +127,13 @@
                                                 </p>
                                             </td>
                                             <td>
-                                                <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                                    <i class="fa fa-times text-danger"></i>
-                                                </button>
+                                                <form action="/delete-cart-product/${cartDetail.id}" method="post">
+                                                    <input type="hidden" name="${_csrf.parameterName}"
+                                                        value="${_csrf.token}" />
+                                                    <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                        <i class="fa fa-times text-danger"></i>
+                                                    </button>
+                                                </form>
                                             </td>
 
                                         </tr>
@@ -175,14 +179,14 @@
                 </div>
                 <!-- Cart Page End -->
 
-
+                <!-- Footer  -->
                 <jsp:include page="../layout/footer.jsp" />
-
+                <!-- end  -->
 
                 <!-- Back to Top -->
                 <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
                         class="fa fa-arrow-up"></i></a>
-
+                <!-- end  -->
 
                 <!-- JavaScript Libraries -->
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -191,6 +195,7 @@
                 <script src="/client/lib/waypoints/waypoints.min.js"></script>
                 <script src="/client/lib/lightbox/js/lightbox.min.js"></script>
                 <script src="/client/lib/owlcarousel/owl.carousel.min.js"></script>
+                <!-- end   -->
 
                 <!-- Template Javascript -->
                 <script src="/client/js/main.js"></script>

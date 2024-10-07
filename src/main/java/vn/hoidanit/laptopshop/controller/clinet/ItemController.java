@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ItemController {
@@ -89,6 +89,20 @@ public class ItemController {
         this.productService.handelAddProductToCart(email, productId, session);
 
         return "redirect:/";
+    }
+
+    @PostMapping("/delete-cart-product/{id}")
+    public String deleteCartDetail(
+            @PathVariable long id,
+            HttpServletRequest request) {
+
+        // TODO: process POST request
+        HttpSession session = request.getSession(false);
+        long cartDetailId = id;
+
+        this.productService.handleRemoveCartDetail(cartDetailId, session);
+
+        return "redirect:/cart";
     }
 
 }
