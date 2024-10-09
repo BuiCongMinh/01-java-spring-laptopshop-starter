@@ -26,6 +26,18 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // oderDetail
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetails;
+
+    private String receiverName;
+
+    private String receiverAddress;
+
+    private String receiverPhone;
+
+    private String status;
+
     public User getUser() {
         return user;
     }
@@ -41,18 +53,6 @@ public class Order {
     public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
     }
-
-    // oderDetail
-    @OneToMany(mappedBy = "order")
-    List<OrderDetail> orderDetails;
-
-    private String receiverName;
-
-    private String receiverAddress;
-
-    private String receiverPhone;
-
-    private String status;
 
     public String getReceiverName() {
         return receiverName;
