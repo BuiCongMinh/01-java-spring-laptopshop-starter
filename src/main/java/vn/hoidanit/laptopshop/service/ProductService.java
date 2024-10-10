@@ -3,7 +3,6 @@ package vn.hoidanit.laptopshop.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
@@ -63,11 +62,17 @@ public class ProductService {
         this.productRepository.deleteById(id);
     }
 
-    public void handelAddProductToCart(String email, long productId, HttpSession session) {
+    public void handelAddProductToCart(
+            String email,
+            long productId,
+            HttpSession session,
+            long quantity) {
 
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
+
             // Check user đã có cart chưa -> nếu chưa -> tạo mới
+
             Cart cart = this.cartRepository.findByUser(user);
 
             if (cart == null) {
@@ -94,7 +99,7 @@ public class ProductService {
                     cd.setCart(cart);
                     cd.setProduct(realProduct);
                     cd.setPrice(realProduct.getPrice());
-                    cd.setQuantity(1);
+                    cd.setQuantity(quantity);
 
                     this.cartDetailRepository.save(cd);
 
@@ -105,14 +110,10 @@ public class ProductService {
                     session.setAttribute("sum", s);
 
                 } else {
-                    oldDetail.setQuantity(oldDetail.getQuantity() + 1);
-
+                    oldDetail.setQuantity(oldDetail.getQuantity() + quantity);
                     this.cartDetailRepository.save(oldDetail);
-
                 }
-
             }
-
         }
 
     }
@@ -147,9 +148,7 @@ public class ProductService {
                 // update "sum" session 0
                 session.setAttribute("sum", 0);
             }
-
         }
-
     }
 
     public void handleUpdateCartBeforeCheckOut(List<CartDetail> cartDetails) {
@@ -204,12 +203,16 @@ public class ProductService {
                     orderDetail.setPrice(cd.getPrice());
 
                     this.orderDetailRepository.save(orderDetail);
+
                 }
 
                 // step two: delete cart_detail and cart
                 for (CartDetail cd : cartDetails) {
+
                     this.cartDetailRepository.deleteById(cd.getId());
+
                 }
+
                 this.cartRepository.deleteById(cart.getId());
 
                 // step there : update session
