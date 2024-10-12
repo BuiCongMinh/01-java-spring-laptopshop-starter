@@ -5,7 +5,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ProductController {
@@ -34,9 +37,30 @@ public class ProductController {
 
     // get all products page
     @GetMapping("/admin/product")
-    public String getProductsPage(Model model) {
-        List<Product> allProduct = this.productService.getAllProduct();
-        model.addAttribute("allProduct", allProduct);
+    public String getProductsPage(
+            Model model,
+            @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            } else {
+                // page = 1
+            }
+        } catch (Exception e) {
+            // page = 1
+            // TODO: handle exception
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, 5);
+
+        Page<Product> allProduct = this.productService.getAllProduct(pageable);
+        List<Product> listProducts = allProduct.getContent();
+
+        model.addAttribute("allProduct", listProducts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", allProduct.getTotalPages());
+
         return "admin/product/show";
 
     }

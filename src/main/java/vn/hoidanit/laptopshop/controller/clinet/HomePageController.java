@@ -2,6 +2,9 @@ package vn.hoidanit.laptopshop.controller.clinet;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +51,9 @@ public class HomePageController {
     @GetMapping("/")
     public String getHomePage(Model model) {
 
-        List<Product> productAll = this.productService.getAllProduct();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> products = this.productService.getAllProduct(pageable);
+        List<Product> productAll = products.getContent();
         model.addAttribute("allProduct", productAll);
 
         return "client/homepage/show";
