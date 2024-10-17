@@ -1,7 +1,6 @@
 package vn.hoidanit.laptopshop.controller.clinet;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +17,7 @@ import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.service.ProductService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +36,7 @@ public class ItemController {
     // ==============GET===================
     // detail product page
     @GetMapping("/product/{id}")
-    public String getProductPage(
+    public String getProductPageByID(
             Model model,
             @PathVariable long id) {
 
@@ -114,19 +114,14 @@ public class ItemController {
     @GetMapping("/products")
     public String getProductPage(
             Model model,
-            @RequestParam("page") Optional<String> pageOptional,
-            @RequestParam("name") Optional<String> nameOptional,
-            @RequestParam("min-price") Optional<String> minOptional,
-            @RequestParam("max-price") Optional<String> maxOptional,
-            @RequestParam("factory") Optional<String> factoryOptional,
-            @RequestParam("price") Optional<String> priceOptional
+            ProductCriteriaDTO productCriteriaDTO
 
     ) {
 
         int page = 1;
         try {
-            if (pageOptional.isPresent()) {
-                page = Integer.parseInt(pageOptional.get());
+            if (productCriteriaDTO.getPage().isPresent()) {
+                page = Integer.parseInt(productCriteriaDTO.getPage().get());
             } else {
                 // page = 1
             }
@@ -136,6 +131,8 @@ public class ItemController {
         }
 
         Pageable pageable = PageRequest.of(page - 1, 60);
+
+        Page<Product> prs = this.productService.fetchProducts(pageable);
 
         // String name = nameOptional.isPresent() ? nameOptional.get() : "";
         // Page<Product> prs = this.productService.fetchProductsWithSpec(pageable,
@@ -167,8 +164,9 @@ public class ItemController {
         // price);
 
         // case 6
-        List<String> price = Arrays.asList(priceOptional.get().split(","));
-        Page<Product> prs = this.productService.fetchProductsWithSpec(pageable, price);
+        // List<String> price = Arrays.asList(priceOptional.get().split(","));
+        // Page<Product> prs = this.productService.fetchProductsWithSpec(pageable,
+        // price);
 
         List<Product> products = prs.getContent();
 
