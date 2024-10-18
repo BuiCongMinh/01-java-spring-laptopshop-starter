@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+        <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"  %>
 
             <!DOCTYPE html>
             <html lang="en">
@@ -101,10 +101,12 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <label class="form-label role">Role: </label>
+
                                                 <form:select class="form-select" path="role.name">
                                                     <form:option value="ADMIN">ADMIN</form:option>
                                                     <form:option value="USER">USER</form:option>
                                                 </form:select>
+
                                             </div>
 
                                             <div class="col-md-8 col-12">

@@ -74,12 +74,17 @@ public class SecurityConfiguration {
                                 "/css/**",
                                 "/js/**",
                                 "/images/**",
-                                "product/**")
+                                "/product/**",
+                                "/products/**"
+
+                        )
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
                         .anyRequest()
-                        .authenticated())
+                        .authenticated()
+
+                )
 
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
