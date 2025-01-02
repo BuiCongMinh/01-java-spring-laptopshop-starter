@@ -75,7 +75,8 @@ public class SecurityConfiguration {
                                 "/js/**",
                                 "/images/**",
                                 "/product/**",
-                                "/products/**"
+                                "/products/**",
+                                "/admin/**"
 
                         )
                         .permitAll()
