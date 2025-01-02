@@ -76,6 +76,7 @@ public class SecurityConfiguration {
                                 "/images/**",
                                 "/product/**",
                                 "/products/**",
+
                                 "/admin/**"
 
                         )
