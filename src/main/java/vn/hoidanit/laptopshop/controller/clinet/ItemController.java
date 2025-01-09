@@ -194,7 +194,8 @@ public class ItemController {
             HttpServletRequest request,
             @RequestParam("receiverName") String receiverName,
             @RequestParam("receiverAddress") String receiverAddress,
-            @RequestParam("receiverPhone") String receiverPhone
+            @RequestParam("receiverPhone") String receiverPhone,
+            @RequestParam("paymentMethod") String paymentMethod
 
     ) {
 
@@ -204,7 +205,17 @@ public class ItemController {
         long id = (long) session.getAttribute("id");
         currentUser.setId(id);
 
-        this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone);
+        this.productService.handlePlaceOrder(
+                currentUser,
+                session,
+                receiverName,
+                receiverAddress,
+                receiverPhone,
+                paymentMethod);
+
+        if (!paymentMethod.equals("COD")) {
+            // TODO redirect to VNPAY
+        }
 
         return "redirect:/thanks";
     }
