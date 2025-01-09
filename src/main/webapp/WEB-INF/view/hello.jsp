@@ -20,6 +20,7 @@
 
         <body>
             Hello <span> ${minhvn} </span> from jsp view-engine <br>
+            Xin Chào các bạn !
             Also you can call <span>${mvn}</span> ! <br>
             <c:out value="${minhvn}" /> //jstl <br>
             ${mvn} // jsp <br>
