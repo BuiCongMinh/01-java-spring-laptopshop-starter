@@ -21,8 +21,8 @@ import vn.hoidanit.laptopshop.service.UserService;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
-
 public class SecurityConfiguration {
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -67,24 +67,13 @@ public class SecurityConfiguration {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
                         .permitAll()
                         .requestMatchers(
-                                "/",
-                                "/login",
-                                "/register",
-                                "/client/**",
-                                "/css/**",
-                                "/js/**",
-                                "/images/**",
-                                "/product/**",
-                                "/products/**",
-
-                                "/admin/**"
+                                "/", "/login", "/product/**", "/register", "/products/**",
+                                "/client/**", "/css/**", "/js/**", "/images/**"
 
                         )
                         .permitAll()
-                        .requestMatchers("/admin/**")
-                        .hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
 
                 )
 
@@ -105,7 +94,7 @@ public class SecurityConfiguration {
 
                 .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
 
-                .rememberMe((r) -> r
+                .rememberMe(r -> r
                         .rememberMeServices(rememberMeServices()));
         ;
 
