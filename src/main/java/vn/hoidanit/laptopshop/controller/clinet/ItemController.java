@@ -1,7 +1,10 @@
 package vn.hoidanit.laptopshop.controller.clinet;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,8 @@ import vn.hoidanit.laptopshop.domain.Product_;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.service.ProductService;
+import vn.hoidanit.laptopshop.service.VNPayService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,9 +34,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ItemController {
     private final ProductService productService;
+    private final VNPayService vNPayService;
 
-    public ItemController(ProductService productService) {
+    public ItemController(ProductService productService, VNPayService vNPayService) {
         this.productService = productService;
+        this.vNPayService = vNPayService;
     }
 
     // ==============GET===================
@@ -108,7 +115,21 @@ public class ItemController {
     }
 
     @GetMapping("/thanks")
-    public String getThankPage(Model model) {
+    public String getThankPage(
+            Model model,
+            @RequestParam("vnp_ResponseCode") Optional<String> vnpayResponseCode,
+            @RequestParam("vnp_TxnRef") Optional<String> paymentRef
+
+    ) {
+        if (vnpayResponseCode.isPresent() && paymentRef.isPresent()) {
+            // thanh toán qua VNPay, cập nhật trạng thái order
+            String paymentStatus = vnpayResponseCode.get().equals("00")
+                    ? "PAYMENT_SUCCEED"
+                    : "PAYMENT_FAILED";
+            this.productService.updatePaymentStatus(paymentRef.get(), paymentStatus);
+
+        }
+
         return "client/cart/thanks";
     }
 
@@ -195,9 +216,10 @@ public class ItemController {
             @RequestParam("receiverName") String receiverName,
             @RequestParam("receiverAddress") String receiverAddress,
             @RequestParam("receiverPhone") String receiverPhone,
-            @RequestParam("paymentMethod") String paymentMethod
+            @RequestParam("paymentMethod") String paymentMethod,
+            @RequestParam("totalPrice") String totalPrice
 
-    ) {
+    ) throws UnsupportedEncodingException {
 
         User currentUser = new User();
         HttpSession session = request.getSession(false);
@@ -205,16 +227,23 @@ public class ItemController {
         long id = (long) session.getAttribute("id");
         currentUser.setId(id);
 
+        final String uuid = UUID.randomUUID().toString().replace("-", "");
+
         this.productService.handlePlaceOrder(
                 currentUser,
                 session,
                 receiverName,
                 receiverAddress,
                 receiverPhone,
-                paymentMethod);
+                paymentMethod,
+                uuid);
 
         if (!paymentMethod.equals("COD")) {
             // TODO redirect to VNPAY
+            String ip = this.vNPayService.getIpAddress(request);
+            String vnpUrl = this.vNPayService.generateVNPayURL(Double.parseDouble(totalPrice), uuid, ip);
+
+            return "redirect:" + vnpUrl;
         }
 
         return "redirect:/thanks";

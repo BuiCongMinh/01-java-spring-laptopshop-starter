@@ -48,6 +48,7 @@
                                                 <th>Total Price</th>
                                                 <th>User</th>
                                                 <th>Status</th>
+                                                <th>Payment</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -60,6 +61,11 @@
                                                     </td>
                                                     <td>${order.user.fullName}</td>
                                                     <td>${order.status}</td>
+                                                    <td>
+                                                        <div>Status: ${order.paymentStatus}</div>
+                                                        <div>Ref: ${order.paymentRef}</div>
+                                                        <div>Method: ${order.paymentMethod}</div>
+                                                    </td>
                                                     <td>
                                                         <a href="/admin/order/${order.id}"
                                                             class="btn btn-success">View</a>

@@ -325,7 +325,8 @@ public class ProductService {
             String receiverName,
             String receiverAddress,
             String receiverPhone,
-            String paymentMethod) {
+            String paymentMethod,
+            String uuid) {
 
         // get cart by user
         Cart cart = this.cartRepository.findByUser(user);
@@ -344,8 +345,6 @@ public class ProductService {
 
                 order.setPaymentMethod(paymentMethod);
                 order.setPaymentStatus("PAYMENT_UNPAID");
-
-                final String uuid = UUID.randomUUID().toString().replace("-", "");
                 order.setPaymentRef(paymentMethod.equals("COD") ? "UNKNOWN" : uuid);
 
                 double sum = 0;
@@ -383,5 +382,17 @@ public class ProductService {
             }
 
         }
+    }
+
+    public void updatePaymentStatus(String paymentRef, String paymentStatus) {
+        Optional<Order> orderOptional = this.orderRepository.findByPaymentRef(paymentRef);
+        if (orderOptional.isPresent()) {
+            // update
+
+            Order order = orderOptional.get();
+            order.setPaymentStatus(paymentStatus);
+            this.orderRepository.save(order);
+        }
+
     }
 }

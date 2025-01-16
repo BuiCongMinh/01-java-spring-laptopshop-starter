@@ -50,7 +50,8 @@
                     <div class="row ">
                         <div class="col-12 mt-5">
                             <div class="alert alert-success" role="alert">
-                                Cảm ơn bạn đã đặt hàng, đơn hàng đã được xác nhận thành công.
+                                Cảm ơn bạn đã đặt hàng, đơn hàng đã được xác nhận thành công!
+                                <a href="/"> Trở về trang chủ </a>
                             </div>
                         </div>
                     </div>
