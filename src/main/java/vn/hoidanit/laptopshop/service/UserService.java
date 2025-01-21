@@ -49,6 +49,10 @@ public class UserService {
         return minhvn1;
     }
 
+    public void saveUser(User user) {
+        this.userRepository.save(user);
+    }
+
     public void deleteUserById(long id) {
         this.userRepository.deleteById(id);
     }
