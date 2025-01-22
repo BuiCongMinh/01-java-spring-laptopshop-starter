@@ -32,7 +32,8 @@ services:
 
     depends_on:
       - db-mysql
-    # volumes:
-    #   db-data:
 
-    # docker compose -p hoidanit-spring-mvc up -d
+    volumes:
+      - ./src:/mvn/spring-mvc-laptopshop/src
+      - ./pom.xml:/mvn/spring-mvc-laptopshop/pom.xml
+      # docker compose -p hoidanit-spring-mvc up -d
