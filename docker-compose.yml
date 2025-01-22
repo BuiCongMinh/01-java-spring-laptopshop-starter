@@ -36,4 +36,7 @@ services:
     volumes:
       - ./src:/mvn/spring-mvc-laptopshop/src
       - ./pom.xml:/mvn/spring-mvc-laptopshop/pom.xml
+
+    env_file:
+      - .env
       # docker compose -p hoidanit-spring-mvc up -d
